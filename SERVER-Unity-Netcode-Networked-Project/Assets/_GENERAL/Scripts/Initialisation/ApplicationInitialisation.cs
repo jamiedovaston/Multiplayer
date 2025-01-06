@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class ApplicationInitialisation : MonoBehaviour
 {
+
     [RuntimeInitializeOnLoadMethod]
     private static void Initialise()
     {

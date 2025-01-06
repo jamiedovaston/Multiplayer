@@ -1,16 +1,22 @@
+using Game.Model;
+using GameServices;
+using Unity.Netcode;
+using Unity.Netcode.Transports.UTP;
 using UnityEngine;
 
-public class ClientNetworkManager : MonoBehaviour
+public class ClientNetworkManager : NetworkManager
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    async void Start()
     {
-        
-    }
+        UnityTransport transport = gameObject.AddComponent<UnityTransport>();
+        NetworkConfig.NetworkTransport = transport;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        await PlayerServices.GetTime();
+        Player player = await PlayerServices.GetPlayer("steam_id");
+
+        Debug.Log($"Player retrieved: {player.Gamertag}");
+
+        StartClient();
+        Debug.Log($"Client Ready.");
     }
 }
