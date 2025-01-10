@@ -12,11 +12,8 @@ public class ClientNetworkManager : NetworkManager
         NetworkConfig.NetworkTransport = transport;
 
         await PlayerServices.GetTime();
-        Player player = await PlayerServices.GetPlayer("steam_id");
-
-        Debug.Log($"Player retrieved: {player.Gamertag}");
+        JSON.Player player = await PlayerServices.GetPlayer("steam_id");
 
         StartClient();
-        Debug.Log($"Client Ready.");
     }
 }

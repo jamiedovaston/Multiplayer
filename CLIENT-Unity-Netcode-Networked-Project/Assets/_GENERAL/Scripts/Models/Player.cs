@@ -1,7 +1,16 @@
 ﻿namespace Game.Model
 {
-    public class Player
+    public class JSON
     {
-        public string Gamertag;
+        public class Player
+        {
+            public string Gamertag;
+        }
+
+        public class Time
+        {
+            public int Year, Month, Day;
+            public int Hours, Minutes, Second;
+        }
     }
 }
