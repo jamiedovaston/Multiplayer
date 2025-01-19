@@ -4,7 +4,8 @@
     {
         public class Player
         {
-            public string Gamertag;
+            public string gamertag;
+            public string steam_id;
         }
 
         public class Time
