@@ -4,6 +4,7 @@ using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using UnityEngine;
 using Steamworks;
+using UnityEngine.Networking;
 
 public class ClientNetworkManager : NetworkManager
 {
@@ -21,16 +22,9 @@ public class ClientNetworkManager : NetworkManager
             return;
         }
 
-        // Get the player's Steam ID
-        CSteamID steamID = SteamUser.GetSteamID();
-        string steamIDString = steamID.ToString();
+        HAuthTicket ticket = SteamUser.GetAuthTicketForWebApi("jamie-dovaston");
 
-        // Get the player data using the Steam ID
-        await PlayerServices.CreatePlayer(steamIDString, $"Player {Random.Range(0, 1000)}");
-        JSON.Player player = await PlayerServices.GetPlayer(steamIDString);
-
-        // Use the player data as needed
-        Debug.Log($"Player Gamertag: {player.gamertag}, Steam ID: {player.steam_id}");
+        UnityWebRequest request = new UnityWebRequest();
 
         // Start the client
         StartClient();
