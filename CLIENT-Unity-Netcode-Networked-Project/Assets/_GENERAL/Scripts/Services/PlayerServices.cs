@@ -42,6 +42,8 @@ namespace GameServices
                 Debug.LogError("Error authorizing player: " + request.error);
             }
 
+            // temp
+            return new CSteamID();
         }
 
         #region Obsolete
