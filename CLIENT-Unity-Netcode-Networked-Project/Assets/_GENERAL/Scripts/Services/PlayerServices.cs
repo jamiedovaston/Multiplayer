@@ -10,6 +10,7 @@ using System.Collections;
 using Unity.VisualScripting;
 using UnityEditor;
 using GameServices.Requests;
+using UnityEditor.PackageManager.Requests;
 
 namespace GameServices
 {
@@ -63,6 +64,26 @@ namespace GameServices
             return new CSteamID(); // Placeholder return
         }
 
+        public static async Task<string> GetSessionSteamID()
+        {
+            UnityWebRequest request = new UnityWebRequest("https://unity-netcode-project-njs.xrdxno.easypanel.host/get-steamid", "GET");
+
+            var operation = request.SendWebRequest();
+
+            while (!operation.isDone)
+                await Task.Yield();
+
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                Debug.Log(request.downloadHandler.text);
+            }
+            else
+            {
+                Debug.LogError("Error authorizing player: " + request.error);
+            }
+
+            return string.Empty;
+        }
 
         #region Obsolete
 

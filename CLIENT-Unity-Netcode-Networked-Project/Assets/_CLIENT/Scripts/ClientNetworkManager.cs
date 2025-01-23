@@ -27,7 +27,8 @@ public class ClientNetworkManager : NetworkManager
             async (callback) =>
             {
                 id = await PlayerServices.AuthorizeSessionWithSteamAuthTicket(callback.m_rgubTicket);
-                Debug.Log($"ID = {id}");
+
+                await PlayerServices.GetSessionSteamID();
             });
 
         // Request the auth ticket
