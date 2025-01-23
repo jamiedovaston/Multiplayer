@@ -26,7 +26,8 @@ namespace GameServices
             string response = await ServerRequest.GetRequest(URL("/tests/time"));
             Debug.Log(response);
         }
-        public static async Task<CSteamID> AuthorizeSessionWithSteamAuthTicket(byte[] _ticket)
+        
+        public static async Task AuthorizeSessionWithSteamAuthTicket(byte[] _ticket)
         {
             UnityWebRequest request = new UnityWebRequest("https://unity-netcode-project-njs.xrdxno.easypanel.host/authorize", "POST");
 
@@ -36,19 +37,18 @@ namespace GameServices
             byte[] body = Encoding.UTF8.GetBytes(json);
 
             request.uploadHandler = new UploadHandlerRaw(body);
-            request.downloadHandler = new DownloadHandlerBuffer();
 
             // Set the content type to JSON
             request.SetRequestHeader("Content-Type", "application/json");
 
-            var operation = request.SendWebRequest();
+            UnityWebRequestAsyncOperation operation = request.SendWebRequest();
 
             while (!operation.isDone)
                 await Task.Yield();
 
             if (request.result == UnityWebRequest.Result.Success)
             {
-                Debug.Log(request.downloadHandler.text);
+                Debug.Log($"Successful login.");
 
                 // Assuming you need to parse the response to get CSteamID
                 // This will depend on the actual response structure
@@ -60,29 +60,51 @@ namespace GameServices
             {
                 Debug.LogError("Error authorizing player: " + request.error);
             }
-
-            return new CSteamID(); // Placeholder return
         }
 
-        public static async Task<string> GetSessionSteamID()
+        public static async Task<CSteamID> GetSessionSteamID()
         {
             UnityWebRequest request = new UnityWebRequest("https://unity-netcode-project-njs.xrdxno.easypanel.host/get-steamid", "GET");
 
-            var operation = request.SendWebRequest();
+            request.downloadHandler = new DownloadHandlerBuffer();
+
+            UnityWebRequestAsyncOperation operation = request.SendWebRequest();
 
             while (!operation.isDone)
                 await Task.Yield();
 
             if (request.result == UnityWebRequest.Result.Success)
             {
-                Debug.Log(request.downloadHandler.text);
+                Debug.Log($"Result: {request.downloadHandler.text}");
+                return new CSteamID();
             }
             else
             {
-                Debug.LogError("Error authorizing player: " + request.error);
+                Debug.LogError("Error getting session id: " + request.error);
             }
 
-            return string.Empty;
+            return new CSteamID();
+        }
+
+        public static async Task SessionLogout()
+        {
+            UnityWebRequest request = new UnityWebRequest("https://unity-netcode-project-njs.xrdxno.easypanel.host/logout", "POST");
+
+            request.downloadHandler = new DownloadHandlerBuffer();
+
+            UnityWebRequestAsyncOperation operation = request.SendWebRequest();
+
+            while (!operation.isDone)
+                await Task.Yield();
+
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                Debug.Log($"SUCCESS: {request.downloadHandler.text}");
+            }
+            else
+            {
+                Debug.LogError("Error logging out session: " + request.error);
+            }
         }
 
         #region Obsolete

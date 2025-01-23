@@ -19,6 +19,7 @@ public class ClientNetworkManager : NetworkManager
         if (!SteamAPI.Init())
         {
             Debug.LogError("SteamAPI_Init() failed. Steam API not available.");
+            
             return;
         }
 
@@ -26,9 +27,8 @@ public class ClientNetworkManager : NetworkManager
         Callback<GetTicketForWebApiResponse_t> m_GetSessionTicketForWebApi = Callback<GetTicketForWebApiResponse_t>.Create(
             async (callback) =>
             {
-                id = await PlayerServices.AuthorizeSessionWithSteamAuthTicket(callback.m_rgubTicket);
-
-                await PlayerServices.GetSessionSteamID();
+                await PlayerServices.AuthorizeSessionWithSteamAuthTicket(callback.m_rgubTicket);
+                id = await PlayerServices.GetSessionSteamID();
             });
 
         // Request the auth ticket
@@ -38,9 +38,18 @@ public class ClientNetworkManager : NetworkManager
         StartClient();
     }
 
-    void OnDestroy()
+    //private void Update()
+    //{
+    //    if (SteamManager.Initialized)
+    //    {
+    //        SteamAPI.RunCallbacks();
+    //    }
+    //}
+
+    private async void OnDestroy()
     {
         // Shutdown Steamworks when the application quits
+        await PlayerServices.SessionLogout();
         SteamAPI.Shutdown();
     }
 }
