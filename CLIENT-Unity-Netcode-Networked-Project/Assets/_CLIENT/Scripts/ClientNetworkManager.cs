@@ -8,7 +8,7 @@ using UnityEngine.Networking;
 
 public class ClientNetworkManager : NetworkManager
 {
-    async void Start()
+    private async void Start()
     {
         UnityTransport transport = gameObject.AddComponent<UnityTransport>();
         NetworkConfig.NetworkTransport = transport;
@@ -22,9 +22,16 @@ public class ClientNetworkManager : NetworkManager
             return;
         }
 
-        HAuthTicket ticket = SteamUser.GetAuthTicketForWebApi("jamie-dovaston");
+        CSteamID id;
+        Callback<GetTicketForWebApiResponse_t> m_GetSessionTicketForWebApi = Callback<GetTicketForWebApiResponse_t>.Create(
+            async (callback) =>
+            {
+                id = await PlayerServices.AuthorizeSessionWithSteamAuthTicket(callback.m_rgubTicket);
+                Debug.Log($"ID = {id}");
+            });
 
-        UnityWebRequest request = new UnityWebRequest();
+        // Request the auth ticket
+        HAuthTicket ticket = SteamUser.GetAuthTicketForWebApi("jamdov");
 
         // Start the client
         StartClient();
