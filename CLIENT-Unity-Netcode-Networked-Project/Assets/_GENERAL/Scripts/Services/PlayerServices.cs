@@ -64,7 +64,7 @@ namespace GameServices
 
         public static async Task<CSteamID> GetSessionSteamID()
         {
-            UnityWebRequest request = new UnityWebRequest("https://unity-netcode-project-njs.xrdxno.easypanel.host/get-steamid", "GET");
+            UnityWebRequest request = new UnityWebRequest("https://unity-netcode-project-njs.xrdxno.easypanel.host/client/session-id", "GET");
 
             request.downloadHandler = new DownloadHandlerBuffer();
 
@@ -72,7 +72,7 @@ namespace GameServices
 
             while (!operation.isDone)
                 await Task.Yield();
-
+            
             if (request.result == UnityWebRequest.Result.Success)
             {
                 Debug.Log($"Result: {request.downloadHandler.text}");
