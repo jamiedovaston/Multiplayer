@@ -6,7 +6,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Tools.Editor
+namespace Game.Tools.Editor
 {
     public class LoadInjectorEditor : EditorWindow
     {

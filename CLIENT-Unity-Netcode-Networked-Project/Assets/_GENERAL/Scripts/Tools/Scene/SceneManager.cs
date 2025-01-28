@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Game.Model.DataAsset.Scene;
 
-namespace Game.Managers
+namespace Game.Tools
 {
     public static class SceneManager
     {
