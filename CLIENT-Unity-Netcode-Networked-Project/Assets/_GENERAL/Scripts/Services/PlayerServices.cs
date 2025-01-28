@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -6,13 +5,9 @@ using UnityEngine.Networking;
 using Game.Model;
 using System;
 using Steamworks;
-using System.Collections;
-using Unity.VisualScripting;
-using UnityEditor;
-using GameServices.Requests;
-using UnityEditor.PackageManager.Requests;
+using Game.Services.Requests;
 
-namespace GameServices
+namespace Game.Services
 {
     public static class PlayerServices
     {

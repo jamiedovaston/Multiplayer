@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace GameServices
+namespace Game.Services
 {
     public class ServerRequest
     {

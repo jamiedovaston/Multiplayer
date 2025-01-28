@@ -1,10 +1,9 @@
 using Game.Model;
-using GameServices;
+using Game.Services;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using UnityEngine;
 using Steamworks;
-using UnityEngine.Networking;
 
 public class ClientNetworkManager : NetworkManager
 {
@@ -15,7 +14,6 @@ public class ClientNetworkManager : NetworkManager
 
         await PlayerServices.GetTime();
 
-        // Initialize Steamworks
         if (!SteamAPI.Init())
         {
             Debug.LogError("SteamAPI_Init() failed. Steam API not available.");
@@ -31,24 +29,13 @@ public class ClientNetworkManager : NetworkManager
                 id = await PlayerServices.GetSessionSteamID();
             });
 
-        // Request the auth ticket
         HAuthTicket ticket = SteamUser.GetAuthTicketForWebApi("jamdov");
 
-        // Start the client
         StartClient();
     }
 
-    //private void Update()
-    //{
-    //    if (SteamManager.Initialized)
-    //    {
-    //        SteamAPI.RunCallbacks();
-    //    }
-    //}
-
     private async void OnDestroy()
     {
-        // Shutdown Steamworks when the application quits
         await PlayerServices.SessionLogout();
         SteamAPI.Shutdown();
     }

@@ -3,7 +3,7 @@ using System;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using Game.Managers;
 
 namespace JD.Application
 {
@@ -11,13 +11,8 @@ namespace JD.Application
     {
         [RuntimeInitializeOnLoadMethod]
         private static void Initialise()
-        {        
-            Debug.Log($"Client Build Commenced.");
-            Instantiate(Resources.Load<GameObject>("Networking/ClientGO"));
-            SceneManager.LoadSceneAsync("MainMenu");
-
-            Debug.Log($"Name: {SteamFriends.GetPersonaName()}");
+        {
+            
         }
     }
-
 }
