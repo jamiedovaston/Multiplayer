@@ -1,18 +1,14 @@
 ﻿using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Game.Tasks
 {
-    public class GameTask : MonoBehaviour, IGameTaskable
+    public class GameTask : MonoBehaviour 
     {
-        [SerializeField] private string m_ID;
-        public string id { get { return m_ID; } }
-        private IGameTaskInternal m_InternalTask { get { return GetComponent<IGameTaskInternal>(); } }
-        public async Task ExecuteInternal()
-        {
-            Debug.Log($"Task Executed: {id}");
-            await m_InternalTask.Execute();
-        }
+        [SerializeField] private string _taskName;
+        public string TaskName { get { return _taskName; } }
+        public IGameTaskInternal task { get { return GetComponent<IGameTaskInternal>(); } }
     }
 
 }

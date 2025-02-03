@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections;
 
 namespace Game.Tasks
 {
     public interface IGameTaskInternal
     {
-        public Task Execute();
+        public bool WaitForCompletion { get; }
+        public IEnumerator Execute(System.Action<string> OnAbortTasksWithError);
     }
 
 }

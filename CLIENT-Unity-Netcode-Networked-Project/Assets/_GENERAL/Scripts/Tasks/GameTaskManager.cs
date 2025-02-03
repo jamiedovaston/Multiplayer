@@ -1,7 +1,8 @@
 using Game.Tasks;
+using System.Collections;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -9,46 +10,44 @@ namespace Game.Managers
 {
     public class GameTaskManager : MonoBehaviour
     {
-        [SerializeField] private string m_ID;
-        public string id { get { return m_ID; } }
+        [SerializeField] private List<GameTask> tasks = new List<GameTask>();
 
-        private void OnEnable()
+        public virtual void Execute(Action OnSuccess, Action<string> OnAbortedWithError)
         {
-            collection.Add(this);
+            StartCoroutine(ExecuteTasksInOrder(OnSuccess, OnAbortedWithError));
         }
 
-        private void OnDisable()
+        [ContextMenu("Execute Task List")]
+        public virtual void Execute()
         {
-            collection.Remove(this);
+            StartCoroutine(ExecuteTasksInOrder(() => { }, DefaultErrorHandler));
         }
 
-        public async Task ExecuteTasks()
+        private IEnumerator ExecuteTasksInOrder(Action OnSuccess, Action<string> OnAbortedWithError)
         {
-            List<IGameTaskable> tasks = GetComponentsInChildren<IGameTaskable>().ToList();
-
-            if (!tasks.Any())
+            foreach (GameTask task in tasks)
             {
-                Debug.LogError($"No tasks in task manager!", this);
-                return;
-            }
+                Debug.Log($"Task : {task.TaskName}");
 
-            for(int i = 0; i < tasks.Count; i++)
-            {
-                await tasks[i].ExecuteInternal();
+                Coroutine coroutine = StartCoroutine(task.task.Execute(error =>
+                {
+                    OnAbortedWithError?.Invoke(error);
+                    Debug.LogError($"Task {task.TaskName} aborted with OnAbortWithErrror: {error}");
+                }));
+
+                if (task.task.WaitForCompletion)
+                {
+                    yield return coroutine;
+                }
             }
+            OnSuccess?.Invoke();
         }
 
-        private static List<GameTaskManager> collection = new List<GameTaskManager>();
-        public static GameTaskManager Get(string _id)
+        private void DefaultErrorHandler(string _error)
         {
-            for(int i = 0; i < collection.Count; i++)
-            {
-                if(collection[i].id == _id)
-                    return collection[i];
-            }
-
-            Debug.LogError($"No manager was found with ID: {_id}");
-            return null;
+            // TODO : Error Logic required
+            // TEMP
+            Debug.LogError($"Error! : {_error}");
         }
     }
 }
