@@ -10,5 +10,4 @@ namespace Game.Tasks
         public string TaskName { get { return _taskName; } }
         public IGameTaskInternal task { get { return GetComponent<IGameTaskInternal>(); } }
     }
-
 }

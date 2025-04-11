@@ -35,8 +35,7 @@ namespace Game.Services
 
             UnityWebRequestAsyncOperation operation = request.SendWebRequest();
 
-            while (!operation.isDone)
-                yield return null;
+            while (!operation.isDone) yield return null;
 
             if (request.result == UnityWebRequest.Result.Success)
             {
@@ -56,8 +55,7 @@ namespace Game.Services
 
             UnityWebRequestAsyncOperation operation = request.SendWebRequest();
 
-            while (!operation.isDone)
-                yield return null;
+            while (!operation.isDone) yield return null;
             
             if (request.result == UnityWebRequest.Result.Success)
             {
@@ -69,7 +67,7 @@ namespace Game.Services
             OnError?.Invoke("Error getting session id: " + request.error);
         }
 
-        public static async Task SessionLogout()
+        public static IEnumerator SessionLogout()
         {
             UnityWebRequest request = new UnityWebRequest("https://unity-netcode-project-njs.xrdxno.easypanel.host/logout", "POST");
 
@@ -77,8 +75,7 @@ namespace Game.Services
 
             UnityWebRequestAsyncOperation operation = request.SendWebRequest();
 
-            while (!operation.isDone)
-                await Task.Yield();
+            while (!operation.isDone) yield return null;
 
             if (request.result == UnityWebRequest.Result.Success)
             {
